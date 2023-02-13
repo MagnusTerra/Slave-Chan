@@ -6,7 +6,7 @@ bot = telebot.TeleBot("5471059094:AAG5dOnDrS0UPP_ysiaBNlNQBus45xfnnz0", parse_mo
 def openia(mess):
     completion = openai.Completion.create(engine="text-davinci-003", 
                                           prompt=mess,
-                                          max_tokens= 2500)
+                                          max_tokens= 4000)
     return str(completion.choices[0].text)
 
 
