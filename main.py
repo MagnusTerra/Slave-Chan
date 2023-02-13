@@ -1,7 +1,10 @@
+import os
 import openai
 import telebot
-openai.api_key = "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"
-bot = telebot.TeleBot("5471059094:AAG5dOnDrS0UPP_ysiaBNlNQBus45xfnnz0", parse_mode=None)
+bot_token = os.environ['TOKEN']
+openaiKey = os.environ['KEY']
+openai.api_key = openaiKey
+bot = telebot.TeleBot(bot_token, parse_mode=None)
 
 def openia(mess):
     completion = openai.Completion.create(engine="text-davinci-003", 
