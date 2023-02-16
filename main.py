@@ -9,7 +9,7 @@ bot = telebot.TeleBot(bot_token, parse_mode=None)
 def openia(mess):
     completion = openai.Completion.create(engine="text-davinci-003", 
                                           prompt=mess,
-                                          max_tokens= 4000)
+                                          max_tokens= 3000)
     return str(completion.choices[0].text)
 
 
