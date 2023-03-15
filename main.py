@@ -44,12 +44,12 @@ def url(message):
     markup = types.InlineKeyboardMarkup()
     btn_my_site= types.InlineKeyboardButton(text='Dame un Cafe', url='https://ko-fi.com/moviesall')
     markup.add(btn_my_site)
-    bot.send_photo(message.chat.id, 'https://t.me/WallpaersChidos/212')
-    bot.send_message(message.chat.id, donaciones, reply_markup = markup)   
+    bot.send_photo(-1001624656642, 'https://t.me/WallpaersChidos/212')
+    bot.send_message(-1001624656642, donaciones, reply_markup = markup)   
 
 @bot.message_handler(commands=['getid'])
 def getid(message):
-    cid= message.chat.id
+    cid= message.channel.id
     bot.send_message(cid, str(cid))
 bot.infinity_polling()
 
