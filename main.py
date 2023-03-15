@@ -1,9 +1,11 @@
 import os
 import openai
 import telebot
+from telebot import types
+from contantes import *
 bot_token = os.environ['TOKEN']
 openaiKey = os.environ['KEY']
-openai.api_key = openaiKey
+openai.api_key = "openaiKey"
 bot = telebot.TeleBot(bot_token, parse_mode=None)
 
 def openia(mess):
@@ -35,6 +37,19 @@ def send_start(message):
 def send_Image(message):
     cid=message.chat.id
     bot.send_chat_action(cid, 'typing')
-    bot.reply_to(message, openimage(message.text))    
+    bot.reply_to(message, openimage(message.text)) 
 
+@bot.message_handler(commands = ['url'])
+def url(message):
+    markup = types.InlineKeyboardMarkup()
+    btn_my_site= types.InlineKeyboardButton(text='Dame un Cafe', url='https://ko-fi.com/moviesall')
+    markup.add(btn_my_site)
+    bot.send_photo(message.chat.id, 'https://t.me/WallpaersChidos/212')
+    bot.send_message(message.chat.id, donaciones, reply_markup = markup)   
+
+@bot.message_handler(commands=['getid'])
+def getid(message):
+    cid= message.chat.id
+    bot.send_message(cid, str(cid))
 bot.infinity_polling()
+
