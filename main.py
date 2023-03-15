@@ -13,6 +13,11 @@ def openia(mess):
     return str(completion.choices[0].text)
 
 
+def openimage(mess):
+    image_resp = openai.Image.create(prompt=mess, n=2, size="1024x1024")
+    image_url = image_resp['data'][0]['url']
+    return str(image_url)
+
 @bot.message_handler(commands=['q'])
 def send_welcome(message):
     cid=message.chat.id
@@ -26,14 +31,10 @@ def send_start(message):
     bot.send_chat_action(cid, 'typing')
     bot.reply_to(message, "Hola")
 
-"""@bot.message_handler(commands=['pdf'])
-def send_pdf(message):
-    cid=message.photo
+@bot.message_handler(commands=['i'])
+def send_Image(message):
+    cid=message.chat.id
     bot.send_chat_action(cid, 'typing')
-    bot.reply_to(message, cid)
-
-@bot.message_handler(commands=['photo'])
-def photo(message):"""
-    
+    bot.reply_to(message, openimage(message.text))    
 
 bot.infinity_polling()
