@@ -5,7 +5,7 @@ from telebot import types
 from contantes import *
 bot_token = os.environ['TOKEN']
 openaiKey = os.environ['KEY']
-openai.api_key = "openaiKey"
+openai.api_key = openaiKey
 bot = telebot.TeleBot(bot_token, parse_mode=None)
 
 def openia(mess):
