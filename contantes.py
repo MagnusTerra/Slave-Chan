@@ -1,1 +1,1 @@
-donaciones = "Si quieres apoyar el canal para que pueda, puedes hacerlo dándome un Café en Ko-Fi"
+donaciones = "¿Quieres apoyar este canal para que siga subiendo contenido? Si es así, ¡puedes donarme un Café para ayudarme a mantenerlo! Tu donación a través de Ko-Fi me permitirá seguir subiendo el contenido que tanto disfrutas. ¡Gracias por tu apoyo!"
