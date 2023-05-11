@@ -9,9 +9,7 @@ openai.api_key = openaiKey
 bot = telebot.TeleBot(bot_token, parse_mode=None)
 
 def openia(mess):
-    completion = openai.Completion.create(model="gpt-3.5-turbo", 
-                                          prompt=mess,
-                                          max_tokens= 3000)
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": {mess}}])
     return str(completion.choices[0].text)
 
 
