@@ -9,7 +9,7 @@ openai.api_key = openaiKey
 bot = telebot.TeleBot(bot_token, parse_mode=None)
 
 def openia(mess):
-    completion = openai.Completion.create(engine="text-davinci-003", 
+    completion = openai.Completion.create(model="gpt-3.5-turbo", 
                                           prompt=mess,
                                           max_tokens= 3000)
     return str(completion.choices[0].text)
