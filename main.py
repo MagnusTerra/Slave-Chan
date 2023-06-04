@@ -20,9 +20,12 @@ def openimage(mess):
 
 @bot.message_handler(commands=['q'])
 def send_welcome(message):
-    cid=message.chat.id
-    bot.send_chat_action(cid, 'typing')
-    bot.reply_to(message, openia(message.text))
+    try:
+        cid=message.chat.id
+        bot.send_chat_action(cid, 'typing')
+        bot.reply_to(message, openia(message.text))
+    except Exception as e:
+        bot.send_message(5471059094, e)
 
 
 @bot.message_handler(commands=['start'])
@@ -45,9 +48,10 @@ def url(message):
     bot.send_photo(-1001624656642, 'https://t.me/WallpaersChidos/212')
     bot.send_message(-1001624656642, donaciones, reply_markup = markup)   
 
-@bot.message_handler(commands=['getid'])
+@bot.message_handler(commands=['pru'])
 def getid(message):
-    cid= message.channel.id
-    bot.send_message(cid, str(cid))
+    cid = message.chat.id
+    bot.send_message(cid, cid)
+    bot.send_message(5471059094, 'Funciono')
 bot.infinity_polling()
 

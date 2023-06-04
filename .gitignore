@@ -1,0 +1,7 @@
+# created by virtualenv automatically
+bin/
+lib/
+gpt4free/
+etc/
+share/
+*.cfg
