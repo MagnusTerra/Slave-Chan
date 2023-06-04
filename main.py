@@ -25,7 +25,7 @@ def send_welcome(message):
         bot.send_chat_action(cid, 'typing')
         bot.reply_to(message, openia(message.text))
     except Exception as e:
-        bot.send_message(5471059094, e)
+        bot.send_message(1144864634, e)
 
 
 @bot.message_handler(commands=['start'])
@@ -52,6 +52,6 @@ def url(message):
 def getid(message):
     cid = message.chat.id
     bot.send_message(cid, cid)
-    bot.send_message(5471059094, 'Funciono')
+    bot.send_message(1144864634, 'Funciono')
 bot.infinity_polling()
 
