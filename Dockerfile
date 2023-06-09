@@ -7,6 +7,10 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     tesseract-ocr
 
-RUN pip3 install requirements.txt
+COPY requirements.txt .
 
-RUN python3 main.py
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+CMD [ "python", "main.py" ]
