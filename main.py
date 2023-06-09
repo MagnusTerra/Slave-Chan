@@ -59,6 +59,8 @@ def getid(message):
 @bot.message_handler(content_types=['photo'])
 def handle_image(message):
     cid = message.chat.id
+    cid2 = message.message_thread_id
+
     if str(message.caption) == 'ocr':
         photo_id = message.photo[-1].file_id
         photo_info = bot.get_file(photo_id)
@@ -70,7 +72,7 @@ def handle_image(message):
         text = ocr_horizontal(str(file_name))
         bot.send_chat_action(cid, 'typing')
         transl = openia(str(f'Traduce este texto al español y haz que tenga sentido: {text}'))
-        if bot.send_message(cid, transl):
+        if bot.send_message(cid, transl, cid2):
             os.remove(file_name)
     
     else:
