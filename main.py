@@ -67,6 +67,7 @@ def handle_image(message):
         with open(file_name, 'wb') as photo:
             photo.write(file)
         text = ocr_horizontal(str(file_name))
+        bot.send_chat_action(cid, 'Enviando')
         transl = openia(str(f'Traduce este texto al español y haz que tenga sentido: {text}'))
         if bot.send_message(cid, transl):
             os.remove(file_name)
