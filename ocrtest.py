@@ -1,3 +1,4 @@
+# Importamos las librerias necesarias 
 import cv2
 import pytesseract
 
