@@ -55,10 +55,11 @@ def getid(message):
     cid = message.chat.id
     bot.send_message(cid, f'Este es el el ID de este Chat {cid}')
 
+# Este evento se ejecutara cuando registre una imagen con un caption de ocr
 @bot.message_handler(content_types=['photo'])
 def handle_image(message):
     cid = message.chat.id
-    if message.from_user.id == 1144864634:
+    if str(message.caption) == 'ocr':
         photo_id = message.photo[-1].file_id
         photo_info = bot.get_file(photo_id)
         file_path = photo_info.file_path
