@@ -5,11 +5,13 @@ from telebot import types
 from contantes import *
 from ocrtest import *
 
+# Establecer las variables del sistema
 bot_token = os.environ['TOKEN']
 openaiKey = os.environ['KEY']
 openai.api_key = openaiKey
 bot = telebot.TeleBot(bot_token, parse_mode=None)
 
+# Esta funcion nos permite usar la API de OpenAI para usar ChatGPT
 def openia(mess):
     completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": mess}])
     return str(completion.choices[0].message.content)
@@ -36,6 +38,7 @@ def send_start(message):
     bot.send_chat_action(cid, 'typing')
     bot.reply_to(message, "Hola")
 
+
 @bot.message_handler(commands=['i'])
 def send_Image(message):
     cid=message.chat.id
@@ -50,6 +53,7 @@ def url(message):
     bot.send_photo(-1001624656642, 'https://t.me/WallpaersChidos/212')
     bot.send_message(-1001624656642, donaciones, reply_markup = markup)   
 
+# Esta funcion manda el ChatID del chat 
 @bot.message_handler(commands=['thischatid'])
 def getid(message):
     cid = message.chat.id
@@ -79,7 +83,7 @@ def handle_image(message):
         pass
 
 
-
+#Esta funcion manda un txt con la informacion completa del mensaje 
 @bot.message_handler(commands=['infomess'])
 def inf_mess(message):
     cid = message.chat.id
@@ -94,5 +98,6 @@ def inf_mess(message):
 
     os.remove(arch)
 
+# Esto mantiene el bot ejecutandoce 
 bot.infinity_polling()
 

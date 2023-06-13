@@ -3,12 +3,11 @@ import cv2
 import pytesseract
 
 def ocr_horizontal(image_path):
-    image = cv2.imread(image_path)
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE) #Cargamos la imagen usando la libreria cv2
+    
+    threshold_img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
 
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-
-    text = pytesseract.image_to_string(gray, config='--psm 3')
+    text = pytesseract.image_to_string(threshold_img, config='--psm 3')
 
     return text
 
