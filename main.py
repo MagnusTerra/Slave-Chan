@@ -70,9 +70,11 @@ def handle_image(message):
         photo_info = bot.get_file(photo_id)
         file_path = photo_info.file_path
         file = bot.download_file(file_path)
-        file_name = f'{cid}.jpg'  
+        file_name = f'{cid}.jpg'
+
         with open(file_name, 'wb') as photo:
             photo.write(file)
+            
         text = ocr_horizontal(str(file_name))
         bot.send_chat_action(cid, 'typing')
         transl = openia(str(f'Traduce este texto al español y haz que tenga sentido: {text}'))
@@ -86,17 +88,18 @@ def handle_image(message):
 #Esta funcion manda un txt con la informacion completa del mensaje 
 @bot.message_handler(commands=['infomess'])
 def inf_mess(message):
-    cid = message.chat.id
-    arch = f'{cid}.txt'
-    conten = str(message)
+    chat_id = message.chat.id
+    file_name = f'{chat_id}.txt'
+    message_content = str(message)
 
-    with open(arch, 'w') as archivo:
-        archivo.write(conten)
+    with open(file_name, 'w') as file:
+        file.write(message_content)
 
-    with open(arch, 'rb') as send_file:
-        bot.send_document(cid, send_file)
+    with open(file_name, 'rb') as document:
+        bot.send_document(chat_id, document)
 
-    os.remove(arch)
+    os.remove(file_name)
+
 
 # Esto mantiene el bot ejecutandoce 
 bot.infinity_polling()
