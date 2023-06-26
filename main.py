@@ -5,6 +5,9 @@ from telebot import types
 from contantes import *
 from ocrtest import *
 from imgs import *
+from daily.get import *
+from daily.download import *
+
 
 # Establecer las variables del sistema
 bot_token = os.environ['TOKEN']
@@ -131,6 +134,16 @@ def inf_mess(message):
         bot.send_document(chat_id, document)
 
     os.remove(file_name)
+
+@bot.message_handler(commands=['nh'])
+def nhentai(message):
+    cid = message.chat.id
+    cid2 = message.message_thread_id
+    text = message.text.split(' ')
+    link = get_imglink(text[1])
+    get_bzdetail(text[1])
+    download_aria2(link, text[1],1)
+    bot.send_message(cid, text[1], cid2)
 
 
 # Esto mantiene el bot ejecutandoce 

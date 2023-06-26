@@ -5,3 +5,5 @@ gpt4free/
 etc/
 share/
 *.cfg
+/bz
+__pycache__/
