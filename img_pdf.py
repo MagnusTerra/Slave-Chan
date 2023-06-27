@@ -1,5 +1,6 @@
 import os
 import img2pdf
+import PyPDF2
 from PyPDF2 import PdfReader, PdfWriter
 
 def imgs_to_pdf(carpeta, name):
@@ -19,13 +20,14 @@ def imgs_to_pdf(carpeta, name):
     
 # Ejemplo de uso
 def reduce_pdf_size(pdf):
-    reader = PdfReader(pdf)
-    writer = PdfWriter()
+    with open(pdf, 'rb') as file:
+        reader = PyPDF2.PdfReader(file)
+        writer = PyPDF2.PdfWriter()
 
-    for page in reader.pages:
-        writer.add_page(page)
+        for page_num in range(len(reader.pages) ):
+            page = reader.pages[page_num]
+            page.compress_content_streams()  # Comprimir el contenido de la página
+            writer.add_page(page)
 
-    writer.add_metadata(reader.metadata)
-
-    with open(f"{pdf}_decude.pdf", "wb") as fp:
-        writer.write(fp)
+        with open(f'{pdf}_decude.pdf', 'wb') as output_file:
+            writer.write(output_file)

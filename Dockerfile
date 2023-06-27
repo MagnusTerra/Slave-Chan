@@ -9,8 +9,12 @@ RUN apt-get update && apt-get install -y \
 
 COPY requirements.txt .
 
+COPY install.sh .
+
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY . .
+RUN chmod +x /install.sh
 
-CMD [ "python3", "main.py" ]
+RUN /install_aria2.sh
+
+COPY . .
