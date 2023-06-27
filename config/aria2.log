@@ -1,0 +1,3 @@
+2023-06-26 19:41:10.631243 [ERROR] [AbstractCommand.cc:401] CUID#29 - Download aborted. URI=https://cdn.hentaibomb.com/g/2544581/22.jpg
+Exception: [AbstractCommand.cc:403] errorCode=4 URI=https://cdn.hentaibomb.com/g/2544581/22.jpg
+  -> [RequestGroup.cc:1266] errorCode=4 Reached max-file-not-found count=10

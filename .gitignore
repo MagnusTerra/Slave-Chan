@@ -7,3 +7,4 @@ share/
 *.cfg
 /bz
 __pycache__/
+script/
