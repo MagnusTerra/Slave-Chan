@@ -15,6 +15,6 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 
 RUN chmod +x /install.sh
 
-RUN /install_aria2.sh
+RUN /install.sh
 
 COPY . .
