@@ -9,6 +9,7 @@ from get import *
 from download import *
 from img_pdf import *
 import shutil
+from downloader import *
 
 
 # Establecer las variables del sistema
@@ -142,21 +143,25 @@ def nhentai(message):
     cid = message.chat.id
     cid2 = message.message_thread_id
     text = message.text.split(' ')
-    mess1 = bot.send_message(cid,'Descargando Dōjinshi')
-    link = get_imglink(text[1])
-    get_bzdetail(text[1],str(cid))
-    download_aria2(link, str(cid),1)
-    bot.delete_message(cid,mess1.message_id,cid2)
-    mess2 = bot.send_message(cid, 'Dōjinshi descargado Convirtiendo a pdf', cid2)
-    
     try:
-        imgs_to_pdf(f'bz/{str(cid)}',str(cid))
+        path = f'bz/{cid}/{text[1]}'
+        process_count = 30
+        mess0 = bot.send_message(cid, 'Descargando Dōjinshi', message_thread_id = cid2)
+        NhentaiDownloader(int(text[1]), process_count, path)
+        bot.delete_message(cid, mess0.message_id, cid2)
+        mess2 = bot.send_message(cid, 'Dōjinshi descargado Convirtiendo a pdf', message_thread_id = cid2)
+    except:
+        bot.delete_message(cid, mess0.message_id, cid2)
+        bot.send_message(cid, 'No se encontro Dōjinshi')
+    try:
+        imgs_to_pdf(f'bz/{cid}/{text[1]}',str(cid))
         reduce_pdf_size(f'{cid}.pdf')
         with open(f"{cid}.pdf_decude.pdf", 'rb') as document:
             bot.send_document(cid, document, cid2)
-        bot.delete_message(cid,mess2.message_id,cid2)
-        os.remove(f"{cid}.pdf_decude.pdf")
+        bot.delete_message(cid,mess2.message_id, cid2)
         os.remove(f'{cid}.pdf')
+        os.remove(f'{cid}.pdf_decude.pdf')
+        
         shutil.rmtree(f'bz/{str(cid)}')
     except Exception as e:
         print(e)
