@@ -4,8 +4,9 @@ RUN apt-get update && apt-get install -y \
     python3.10 \
     python3-pip \
     tesseract-ocr \
-    libgl1-mesa-glx 
-    
+    libgl1-mesa-glx \
+    ghostscript
+
 
 COPY requirements.txt .
 

@@ -8,3 +8,4 @@ share/
 /bz
 __pycache__/
 script/
+temp_images/

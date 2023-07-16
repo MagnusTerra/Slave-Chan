@@ -8,15 +8,28 @@ from imgs import *
 from get import *
 from download import *
 from img_pdf import *
+from funcs import *
 import shutil
 from downloader import *
-
-
+from buttons import *
+import time
 # Establecer las variables del sistema
 bot_token = os.environ['TOKEN']
 openaiKey = os.environ['KEY']
 openai.api_key = openaiKey
 bot = telebot.TeleBot(bot_token, parse_mode=None)
+
+temp_dir = 'temp_images'
+image_counters = {}
+bot.set_my_commands(commands = [
+    telebot.types.BotCommand('start', 'Comando de inicio del Bot'),
+    telebot.types.BotCommand('pdf', 'Convertir imgs a PDF')
+])
+os.makedirs(temp_dir, exist_ok=True)
+
+user_actions = {}
+image_counters = {}
+
 
 # Esta funcion nos permite usar la API de OpenAI para usar ChatGPT
 def openia(mess):
@@ -66,10 +79,10 @@ def getid(message):
     cid = message.chat.id # Almacenar el ID del chat en la variable cid
     bot.send_message(cid, f'Este es el el ID de este Chat {cid}') # Responder al mensaje con el ID del chat usando la variable cid
 
-
 # Este evento se ejecutara cuando registre una imagen con un caption de ocr
 @bot.message_handler(content_types=['photo'])
 def handle_image(message):
+    user_id = message.chat.id
     cid = message.chat.id   # Obtenemos el ID del chat donde se recibió el mensaje
     cid2 = message.message_thread_id   # Obtenemos el ID del hilo de mensajes donde se recibió el mensaje
     caption = str(message.caption)   # Convertimos la leyenda en una cadena de texto (si existe)
@@ -94,7 +107,7 @@ def handle_image(message):
 
         bot.send_message(cid, transl, cid2)# Envía el texto traducido al usuario
         os.remove(file_name) # Elimina el archivo descargado
-
+   
     # Verifica si el caption es "st"
     elif caption == "st":
         # Obtener la información de la foto
@@ -117,6 +130,24 @@ def handle_image(message):
         # Elimina los archivos descargados
         os.remove(file_name)
         os.remove(f"{cid}.png")
+
+    try:
+        if user_actions[user_id] == 'pdf':
+            chat_dir = os.path.join(temp_dir, str(user_id))
+            os.makedirs(chat_dir, exist_ok=True)
+            # Download the photo
+            file_id = message.photo[-1].file_id
+            file_info = bot.get_file(file_id)
+            downloaded_file = bot.download_file(file_info.file_path)
+            #time.sleep(0.20)   
+            file_path = os.path.join(chat_dir, f"{image_counters[user_id]}.png")
+            image_counters[user_id] += 1
+            with open(file_path, 'wb') as file:
+                file.write(downloaded_file)
+            bot.reply_to(message, 'Imagen descargada')
+            time.sleep(0.25) 
+    except:
+        pass
 
     else:
         pass
@@ -165,6 +196,54 @@ def nhentai(message):
         shutil.rmtree(f'bz/{str(cid)}')
     except Exception as e:
         print(e)
+
+
+@bot.message_handler(commands=['pdf'])
+def handle_pdf(message):
+    user_id = message.chat.id
+    user_actions[user_id] = 'pdf'
+    image_counters[user_id] = 1
+    markup = pdf_buttons()
+    bot.send_message(chat_id=user_id, text="Envia las Fotos para hacelas PDF", reply_markup=markup)
+
+@bot.message_handler(content_types=['text'])
+def handle_all_chat(mess):
+    chat_id = mess.chat.id
+    mess_text = mess.text
+    user_id = mess.chat.id
+    if mess_text == 'PDF':
+        try:
+            file_list = os.listdir(f'temp_images/{chat_id}')
+        except:
+            bot.send_message(chat_id=chat_id, text='No haz enviado ninguna imagen')
+            return 0
+        if len(file_list) == 0:
+            bot.send_message(chat_id=chat_id, text='No ha cargado images para convertir, primero envia las imagenes')
+        else:
+            mess1 = bot.send_message(chat_id=chat_id, text=f'Convirtiendo las imagenes a PDF')
+            imgs_to_pdf(f'temp_images/{chat_id}',str(chat_id)+'gs')
+            compress(f'{chat_id}gs.pdf',f'{chat_id}gsa.pdf', 0)
+            bot.delete_message(chat_id=chat_id, message_id=mess1.message_id)
+            mess2 = bot.send_message(chat_id=chat_id, text='Enviando archivo')
+            with open(f'{chat_id}gsa.pdf', 'rb') as document:
+                bot.send_document(chat_id=chat_id, document=document)
+            bot.delete_message(chat_id=chat_id,message_id=mess2.message_id)
+            try:
+                user_actions[user_id] = None
+                os.remove(f'{chat_id}gsa.pdf')
+                os.remove(f'{chat_id}gs.pdf')
+                shutil.rmtree(f'temp_images/{str(chat_id)}/')
+                bot.send_message(chat_id=chat_id, text=f'Accion terminada', reply_markup=types.ReplyKeyboardRemove())
+            except:
+                bot.send_message(chat_id=chat_id, text=f'Accion terminada', reply_markup=types.ReplyKeyboardRemove())
+
+    elif mess_text == 'Salir':
+        try:
+            user_actions[user_id] = None
+            shutil.rmtree(f'temp_images/{str(chat_id)}/')
+            bot.send_message(chat_id=chat_id, text=f'Saliendo de la accion', reply_markup=types.ReplyKeyboardRemove())
+        except:
+            bot.send_message(chat_id=chat_id, text=f'Saliendo de la accion', reply_markup=types.ReplyKeyboardRemove())
 # Esto mantiene el bot ejecutandoce 
 bot.infinity_polling()
 
