@@ -9,3 +9,11 @@ share/
 __pycache__/
 script/
 temp_images/
+
+*.png
+*.webp
+*.pdf
+youtubeaudio/
+pruebas/
+testing.py 
+test2.py
